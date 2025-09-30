@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RYUUMA VAN ASHVYR - Arcade</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Press Start 2P', cursive;
+      background: #000;
+      color: #0ff;
+      text-align: center;
+      overflow-x: hidden;
+      line-height: 2;
+    }
+
+    /* Efek layar arcade CRT */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        rgba(0,0,0,0.2) 0px,
+        rgba(0,0,0,0.2) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Tombol musik */
+    .music-btn {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 20;
+      color: #ff0;
+      text-shadow: 0 0 8px #f0f, 0 0 15px #0ff;
+      transition: transform 0.2s;
+    }
+    .music-btn:hover {
+      transform: scale(1.2);
+    }
+
+    audio { display: none; }
+
+    /* Container arcade */
+    .container {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+      border: 4px solid #0ff;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #0ff, inset 0 0 20px #f0f;
+      background: rgba(0,0,0,0.7);
+    }
+
+    /* Foto profil */
+    .profile img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 4px solid #ff0;
+      box-shadow: 0 0 20px #f0f, 0 0 40px #0ff;
+      cursor: pointer;
+    }
+
+    /* Nama glitch arcade */
+    .glitch {
+      font-size: 22px;
+      margin-top: 20px;
+      animation: glitch 1s infinite;
+      color: #fff;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 #f0f, -2px 0 #0ff; }
+      25% { text-shadow: -2px -2px #ff0, 2px 2px #0ff; }
+      50% { text-shadow: 2px 2px #0ff, -2px -2px #f0f; }
+      75% { text-shadow: -2px 0 #ff0, 2px 0 #f0f; }
+      100% { text-shadow: 2px 0 #f0f, -2px 0 #0ff; }
+    }
+
+    /* Bagian kontak */
+    .contact {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+    }
+
+    .contact img {
+      width: 110px;
+      border: 3px solid #0ff;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0ff, 0 0 30px #f0f;
+      transition: transform 0.2s;
+    }
+    .contact img:hover {
+      transform: scale(1.1);
+    }
+
+    .dana-box {
+      font-size: 14px;
+      color: #ff0;
+    }
+
+    .copy-btn {
+      margin-top: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      background: #111;
+      color: #fff;
+      border: 2px solid #f0f;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 0 5px #f0f, 0 0 10px #0ff;
+    }
+
+    /* Banner */
+    .glitch-img {
+      display: inline-block;
+      margin-top: 40px;
+    }
+    .glitch-img img {
+      width: 90%;
+      max-width: 750px;
+      border-radius: 15px;
+      border: 4px solid #ff0;
+      box-shadow: 0 0 15px #f0f, 0 0 40px #0ff;
+      animation: flicker 2s infinite;
+      cursor: pointer;
+    }
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.6; }
+    }
+
+    /* Text bawah banner */
+    .banner-text {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #0ff;
+      text-shadow: 0 0 5px #f0f;
+    }
+
+    /* Fee list */
+    .fees {
+      margin: 50px auto;
+      max-width: 700px;
+      display: flex;
+      justify-content: space-between;
+      text-align: left;
+      font-size: 12px;
+      line-height: 2;
+      color: #fff;
+    }
+
+    /* Tambahan */
+    .extra {
+      margin-top: 30px;
+      font-size: 11px;
+      color: #f55;
+      text-shadow: 0 0 8px #f00, 0 0 12px #f0f;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 10px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tombol Musik -->
+  <div class="music-btn" onclick="toggleMusic()">▶️</div>
+
+  <!-- Musik -->
+  <audio id="bg-music" autoplay loop>
+    <source src="https://files.catbox.moe/u4ui3m.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <!-- Profile -->
+    <div class="profile">
+      <a href="https://wa.me//6285187505482">
+        <img src="https://files.catbox.moe/5ypc89.png" alt="Profile">
+      </a>
+    </div>
+
+    <div class="glitch">RYUUMA VAN ASHVYR</div>
+
+    <!-- Contact -->
+    <div class="contact">
+      <div class="dana-box">
+        DANA : 085706645429 <br>
+        <button class="copy-btn" onclick="copyDana()">Salin</button>
+      </div>
+      <a href="https://wa.me/p/25237899409149771/6285187505482">
+        <img src="https://files.catbox.moe/ohj61k.jpg" alt="QRIS">
+      </a>
+    </div>
+
+    <!-- Banner -->
+    <a href="https://wa.me//6285187505482" class="glitch-img">
+      <img src="https://files.catbox.moe/v2vl3a.png" alt="Banner">
+    </a>
+
+    <div class="banner-text">
+      🎮 KLIK GAMBAR UNTUK MULAI CHAT — SAVE NOMOR RYUUMA❕
+    </div>
+
+    <!-- Fee list -->
+    <div class="fees">
+      <div>
+        1k — 50k : 1k <br>
+        51k — 100k : 2k <br>
+        101k — 200k : 3k <br>
+        201k — 400k : 4k <br>
+        401k — 600k : 5k
+      </div>
+      <div>
+        601k — 700k : 6k <br>
+        701k — 900k : 7k <br>
+        901k — 1jt : 10k <br>
+        1jt — 2jt : 15k
+      </div>
+    </div>
+
+    <div class="extra">
+      ⚠️ TAMBAHAN <br>
+      • MC Pending : +5k <br>
+      • All Reff : +5k <br>
+      • No Reff? → ❌ <br>
+      • TRX batal → Fee tetap kepotong
+    </div>
+  </div>
+
+  <footer>
+    © 2025 RYUUMA VAN ASHVYR | Arcade Style
+  </footer>
+
+  <script>
+    function copyDana() {
+      navigator.clipboard.writeText("085706645429").then(() => {
+        alert("Nomor DANA berhasil disalin!");
+      });
+    }
+
+    // Musik play/pause
+    const music = document.getElementById("bg-music");
+    let isPlaying = true;
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+        document.querySelector(".music-btn").textContent = "⏸️";
+      } else {
+        music.play();
+        document.querySelector(".music-btn").textContent = "▶️";
+      }
+      isPlaying = !isPlaying;
+    }
+  </script>
+</body>
+</html>
